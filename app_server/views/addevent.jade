@@ -1,0 +1,65 @@
+extends layout
+block content
+    .page-header
+    .row
+        .col-xs-12
+            .panel-body.panel.panel-default
+                .bs-component
+                    form.form-horizontal
+                        fieldset
+                            legend
+                                | Create your own event
+                            .form-group
+                                .col-xs-2
+                                    label(for='inputfile').control-label Banner
+                                .col-xs-10.col-xs-offset-5
+                                    input(type='file')(id='inputfile')
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventtitle').control-label Title
+                                .col-xs-10
+                                    input(type='text')(placeholder='Event Title')(id='eventtitle').form-control
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventtime').control-label Time
+                                .col-xs-10
+                                    input(type='text')(placeholder='16:30')(id='eventtime').form-control
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventdate').control-label Date
+                                .col-xs-10
+                                    input(type='text')(placeholder='DD/MM/YYYY')(id='eventdate').form-control
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventlocation').control-label Location
+                                .col-xs-10
+                                    input(type='text')(placeholder='Event Location')(id='eventlocation').form-control
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventparticipants').control-label Participants
+                                .col-xs-10
+                                    input(type='text')(placeholder='Number of Participants')(id='eventparticipants').form-control
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventtime').control-label Category
+                                .col-xs-10
+                                    select.form-control
+                                        option Culture Exchange
+                                        option Belief
+                                        option Study
+                                        option Sports
+                                        option Outdoor & Adventure
+                                        option Tech
+                                        option Games
+                                        option Food & Drink
+                                        option Arts
+                                        option Others
+                            .form-group
+                                .col-xs-2
+                                    label(for='eventdescription').control-label Description
+                                .col-xs-10
+                                    textarea(placeholder='Event Description')(id='eventdescription').form-control
+                            .form-group
+                                .col-xs-12.col-xs-offset-5
+                                    button(type='submit').btn.bt-primary
+                                        |Submit
