@@ -1,21 +1,37 @@
-var mysql = require('mysql')
-var con = mysql.createConnection({
-  host     : '127.0.0.1',
-  user     : 'root',
-  password : 'password',
-  database : 'UTogether'
+var mongoose = require( 'mongoose' );
+var gracefulShutdown;
+var dbURI = 'mongodb://localhost/UTogether';
+mongoose.connect(dbURI);
+mongoose.connection.on('connected', function () {
+console.log('Mongoose connected to ' + dbURI);
 });
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
+mongoose.connection.on('error',function (err) {
+console.log('Mongoose connection error: ' + err);
 });
-con.end(function(err) {
-  // The connection is terminated gracefully
-  // Ensures all previously enqueued queries are still
-  // before sending a COM_QUIT packet to the MySQL server.
-  if(err) console.log('err: ', err);
-  else console.log('Terminated done: ');
+mongoose.connection.on('disconnected', function () {
+console.log('Mongoose disconnected');
+});
+gracefulShutdown = function (msg, callback) {
+mongoose.connection.close(function () {
+console.log('Mongoose disconnected through ' + msg);
+callback();
+});
+};
+// For nodemon restarts
+process.once('SIGUSR2', function () {
+gracefulShutdown('nodemon restart', function () {
+process.kill(process.pid, 'SIGUSR2');
+});
+});
+// For app termination
+process.on('SIGINT', function() {
+gracefulShutdown('app termination', function () {
+process.exit(0);
+});
+});
+// For Heroku app termination
+process.on('SIGTERM', function() {
+gracefulShutdown('Heroku app shutdown', function () {
+process.exit(0);
+});
 });

@@ -1,10 +1,3 @@
-var mysql = require('mysql')
-// exports.eventsCreate = function (req, res) {
-//     res.send({
-//         "code": 200,
-//         "success": "successfull"
-//     });
-// }
 var db = require('../models/db'); //reference of db.js  
 var Event = {  
     eventsListByDate: function(callback) {  
