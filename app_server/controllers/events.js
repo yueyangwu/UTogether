@@ -109,15 +109,15 @@ function(err, response, body) {
 }
 );
 };
-module.exports.doAddReview = function(req, res){
+module.exports.doAddComment = function(req, res){
 };
-var renderReviewForm = function (req, res) {
-res.render('location-review-form', {
+var renderCommentForm = function (req, res) {
+res.render('event-comment-form', {
 title: 'Review Starcups on Loc8r',
 pageHeader: { title: 'Review Starcups' }
 });
 };
 /* GET 'Add review' page */
-module.exports.addReview = function(req, res){
-renderReviewForm(req, res);
+module.exports.addComment = function(req, res){
+renderCommentForm(req, res);
 };
