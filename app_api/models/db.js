@@ -1,10 +1,12 @@
 var mongoose = require( 'mongoose' );
 var gracefulShutdown;
+
 var dbURI = 'mongodb://localhost/UTogether';
 if (process.env.NODE_ENV === 'production') {
-dbURI = process.env.MONGOLAB_URI;
+dbURI = 'mongodb://heroku_mc26h7x7:lrikpihek8v8fo28rhish9209d@ds215089.mlab.com:15089/heroku_mc26h7x7'; //process.env.MONGOLAB_URI;
 }
 mongoose.connect(dbURI);
+
 mongoose.connection.on('connected', function () {
 console.log('Mongoose connected to ' + dbURI);
 });
@@ -38,4 +40,5 @@ gracefulShutdown('Heroku app shutdown', function () {
 process.exit(0);
 });
 });
+
 require('./events');

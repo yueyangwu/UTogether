@@ -2,11 +2,19 @@ var mongoose = require('mongoose');
 var Ut = mongoose.model('Event');
 var db = require('../models/db');
 
+var request = require('request');
+var apiOptions = {
+server : "http://localhost:3000"
+};
+if (process.env.NODE_ENV === 'production') {
+apiOptions.server = "https://polar-river-81614.herokuapp.com/";
+}
+
 var sendJsonResponse = function(res, status, content) {
 res.status(status);
 res.json(content);
 };
-/*
+
 module.exports.commentsCreate = function(req, res) {
 var eventid = req.params.eventid;
 if (eventid) {
@@ -171,5 +179,5 @@ sendJsonResponse(res, 404, {
 }
 );
 };
-*/
+
 // module.exports = Event;

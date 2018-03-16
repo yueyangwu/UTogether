@@ -1,3 +1,10 @@
+var request = require('request');
+var apiOptions = {
+server : "http://localhost:3000"
+};
+if (process.env.NODE_ENV === 'production') {
+apiOptions.server = "https://polar-river-81614.herokuapp.com/";
+}
 /* GET 'home' page */
 module.exports.eventsList = function(req, res){
 res.render('eventslist', { 
@@ -36,7 +43,7 @@ res.render('addevent', { title: 'Add Event' });
 module.exports.myEvent = function(req, res){
 res.render('index', { title: 'My Events' });
 };
-/*
+
 var renderHomepage = function(req, res, responseBody){
 res.render('locations-list', {
 title: 'Utogether - find your friends',
@@ -69,4 +76,3 @@ renderHomepage(req, res);
 }
 );
 };
-*/
