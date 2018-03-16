@@ -14,6 +14,7 @@ res.render('eventslist', {
         date: '10/23/2017',
         time: '17:30',
         joined: '18 joined',
+        location: '123 Lavaca St',
         distance: '100m'
     },
     {
@@ -21,6 +22,7 @@ res.render('eventslist', {
         date: '10/13/2017',
         time: '13:10',
         joined: '29 joined',
+        location: '1234 Lavaca St',
         distance: '200m'
     },
     {
@@ -28,6 +30,7 @@ res.render('eventslist', {
         date: '10/9/2017',
         time: '10:00',
         joined: '10 joined',
+        location: '12345 Lavaca St',
         distance: '250m'
     }]
  });

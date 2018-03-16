@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Ut = mongoose.model('Event');
-var db = require('../models/db');
 
 var sendJsonResponse = function(res, status, content) {
 res.status(status);

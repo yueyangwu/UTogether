@@ -1,4 +1,3 @@
-var db = require('../models/db'); //reference of db.js  
 var mongoose = require('mongoose');
 var Ut = mongoose.model('Event');
 
