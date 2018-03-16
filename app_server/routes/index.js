@@ -12,4 +12,4 @@ router.get('/event/myevent', ctrlEvents.myEvent);
 /* Other pages */
 router.get('/about', ctrlOthers.about);
 
-module.exports = router;
+module.exports = router; 
