@@ -12,27 +12,33 @@ res.render('eventslist', {
     title: 'Event List',
     events: [{
         title: 'Pumpkin Carving Night',
-        date: '10/23/2017',
-        time: '17:30',
-        joined: '18 joined',
-        location: '123 Lavaca St',
-        distance: '100m'
+        date: '23 October 2019',
+        time: '5:30pm',
+        // joined: '18 joined',
+        location: '1800 Lavaca St, Austin, TX',
+        coords: [-97.741202, 30.280824],
+        category: 'culture',
+        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
     },
     {
         title: 'Introduction to Authentic Chinese Food',
-        date: '10/13/2017',
-        time: '13:10',
-        joined: '29 joined',
-        location: '1234 Lavaca St',
-        distance: '200m'
+        date: '13 October 2019',
+        time: '1:10pm',
+        // joined: '29 joined',
+        location: '1914 Guadalupe St, Austin, TX 78705 78701',
+        coords: [-97.742457, 30.282683],
+        category: 'food',
+        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
     },
     {
         title: 'International Faculty & Scholars Social Hour',
-        date: '10/9/2017',
-        time: '10:00',
-        joined: '10 joined',
-        location: '12345 Lavaca St',
-        distance: '250m'
+        date: '9 October 2019',
+        time: '10:00am',
+        // joined: '10 joined',
+        location: '201 W 21st St, Austin, TX 78705',
+        coords: [-97.739604, 30.284067],
+        category: 'culture',
+        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
     }]
  });
 };

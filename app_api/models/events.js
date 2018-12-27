@@ -7,14 +7,15 @@ createdOn: {type: Date, default: Date.now}
 });
 var eventSchema = new mongoose.Schema({
 title: {type: String, required: true},
-date: {type: Date, default: Date.now},
+date: {type: Date, default: Date.now, required: true},
 time: {type: String, required: true},
-joined: {type: Number, "default": 0, min: 0},
-limit: {type: Number, "default": 0, min: 0},
-coords: {type: [Number], index: '2dsphere', required: true},
+// joined: {type: Number, "default": 0, min: 0},
+// limit: {type: Number, "default": 0, min: 0},
+location: {type: String, required: true},
+coords: {type: [Number], index: '2dsphere'},
 category: {type: String, required: true},
 description: {type: String, required: true},
-img: {data: Buffer, contentType: String},
+// img: {data: Buffer, contentType: String},
 comments:[commentsSchema]
 });
 

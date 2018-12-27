@@ -3,7 +3,7 @@ var gracefulShutdown;
 
 var dbURI = 'mongodb://localhost/UTogether';
 if (process.env.NODE_ENV === 'production') {
-dbURI = 'mongodb://heroku_mc26h7x7:lrikpihek8v8fo28rhish9209d@ds215089.mlab.com:15089/heroku_mc26h7x7'; //process.env.MONGOLAB_URI;
+dbURI = process.env.MONGOLAB_URI;
 }
 mongoose.connect(dbURI);
 
