@@ -1,91 +1,107 @@
 var request = require('request');
 var apiOptions = {
-server : "http://localhost:3000"
+    server : "http://localhost:3000"
 };
 if (process.env.NODE_ENV === 'production') {
-apiOptions.server = "https://polar-river-81614.herokuapp.com/";
+    apiOptions.server = "https://polar-river-81614.herokuapp.com/";
 }
 
 /* GET 'home' page */
-module.exports.eventsList = function(req, res){
-res.render('eventslist', { 
-    title: 'Event List',
-    events: [{
-        title: 'Pumpkin Carving Night',
-        date: '23 October 2019',
-        time: '5:30pm',
-        // joined: '18 joined',
-        location: '1800 Lavaca St, Austin, TX',
-        coords: [-97.741202, 30.280824],
-        category: 'culture',
-        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
-    },
-    {
-        title: 'Introduction to Authentic Chinese Food',
-        date: '13 October 2019',
-        time: '1:10pm',
-        // joined: '29 joined',
-        location: '1914 Guadalupe St, Austin, TX 78705 78701',
-        coords: [-97.742457, 30.282683],
-        category: 'food',
-        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
-    },
-    {
-        title: 'International Faculty & Scholars Social Hour',
-        date: '9 October 2019',
-        time: '10:00am',
-        // joined: '10 joined',
-        location: '201 W 21st St, Austin, TX 78705',
-        coords: [-97.739604, 30.284067],
-        category: 'culture',
-        description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
-    }]
- });
-};
-
-/* GET 'Add event' page */
-module.exports.addEvent = function(req, res){
-res.render('addevent', { title: 'Add Event' });
-};
-module.exports.myEvent = function(req, res){
-res.render('index', { title: 'My Events' });
-};
-
+// module.exports.eventsList = function(req, res){
+// res.render('eventslist', { 
+//     title: 'Event List',
+//     events: [{
+//         title: 'Pumpkin Carving Night',
+//         date: '23 October 2019',
+//         time: '5:30pm',
+//         location: '1800 Lavaca St, Austin, TX 78701',
+//         coords: [-97.741202, 30.280824],
+//         category: 'culture',
+//         description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
+//     },
+//     {
+//         title: 'Introduction to Authentic Chinese Food',
+//         date: '13 October 2019',
+//         time: '1:10pm',
+//         location: '1914 Guadalupe St, Austin, TX 78705',
+//         coords: [-97.742457, 30.282683],
+//         category: 'food',
+//         description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
+//     },
+//     {
+//         title: 'International Faculty & Scholars Social Hour',
+//         date: '9 October 2019',
+//         time: '10:00am',
+//         location: '201 W 21st St, Austin, TX 78705',
+//         coords: [-97.739604, 30.284067],
+//         category: 'culture',
+//         description: "Join us Halloween Night! Join PALS for a ghostly night of pumpkin carving! Don't miss out on this treat!"
+//     }]
+//  });
+// };
 var renderHomepage = function(req, res, responseBody){
-var message;
-if (!(responseBody instanceof Array)) {
-    message = "API lookup error";
-    responseBody = [];
-} else {
-    if (!responseBody.length) {
-        message = "No places found nearby";
+    var message;
+    if (!(responseBody instanceof Array)) {
+        message = "API lookup error";
+        responseBody = [];
+    } 
+    else {
+        if (!responseBody.length) {
+            message = "No places found nearby";
+        }
     }
-}
-res.render('events-list', {
-    title: 'Utogether - find your friends',
-    pageHeader: {
-    title: 'Utogether',
-    strapline: 'Help you find your friends'
-},
-    sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
-    events: responseBody,
-    message: message
-});
+    res.render('eventslist', {
+        // title: 'Utogether - find your friends',
+        // pageHeader: {
+        //     title: 'Utogether',
+        //     strapline: 'Help you find your friends'
+        // },
+        // sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
+        events: responseBody,
+        message: message
+    });
+};
+
+var _isNumeric = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 var _formatDistance = function (distance) {
-    var numDistance, unit;
-    if (distance > 1) {
-        numDistance = parseFloat(distance).toFixed(1);
-        unit = 'km';
+    var numDistance;
+    if (_isNumeric(distance)) {
+        if (distance > 1) {
+          numDistance = parseFloat(distance).toFixed(1);//If supplied distance is over 1, round to one decimal place
+          return numDistance + ' m';
+        } else {
+          numDistance = parseInt(distance,10);//Otherwise round to nearest meter
+          return numDistance + ' m';
+        }
     } else {
-        numDistance = parseInt(distance * 1000,10);
-        unit = 'm';
+        console.log("the distance is:" + distance);
+        return "?";
     }
-    return numDistance + unit;
 };
 
-module.exports.homelist = function(req, res){
+var _showError = function (req, res, status) {
+  var title, content;
+  if (status === 404) {
+    title = "404, page not found";
+    content = "Oh dear. Looks like we can't find this page. Sorry.";
+  } else if (status === 500) {
+    title = "500, internal server error";
+    content = "How embarrassing. There's a problem with our server.";
+  } else {
+    title = status + ", something's gone wrong";
+    content = "Something, somewhere, has gone just a little bit wrong.";
+  }
+  res.status(status);
+  res.render('generic-text', {
+    title : title,
+    content : content
+  });
+};
+
+module.exports.eventsList = function(req, res){
     var requestOptions, path;
     path = '/api/events';
     requestOptions = {
@@ -93,25 +109,40 @@ module.exports.homelist = function(req, res){
         method : "GET",
         json : {},
         qs : {
-            lng : -0.7992599,
-            lat : 51.378091,
+            // lng : 1,
+            // lat : 1,
+            // maxDistance : 0.002
+            lng : -97.742457,
+            lat : 30.282683,
+            // lng : -97.741202,
+            // lat : 30.280824,
             maxDistance : 20
         }
     };
     request(
-    requestOptions,
-    function(err, response, body) {
-        var i, data;
-        data = body;
-        if (response.statusCode === 200 && data.length) {
-            for (i=0; i<data.length; i++) {
-                data[i].distance = _formatDistance(data[i].distance);
+        requestOptions,
+        function(err, response, body) {
+            var i, data;
+            data = body;
+            console.log(data);
+            if (response.statusCode === 200 && data.length) {
+                for (i=0; i<data.length; i++) {
+                    data[i].distance = _formatDistance(data[i].distance);
+                }
             }
+            renderHomepage(req, res, data);
         }
-    renderHomepage(req, res, data);
-    }
     );
 };
+
+/* GET 'Add event' page */
+// module.exports.addEvent = function(req, res){
+//     res.render('addevent', { title: 'Add Event' });
+// };
+// module.exports.myEvent = function(req, res){
+//     res.render('index', { title: 'My Events' });
+// };
+
 
 module.exports.doAddComment = function(req, res){
     var requestOptions, path, eventid, postdata;
@@ -126,29 +157,38 @@ module.exports.doAddComment = function(req, res){
         method : "POST",
         json : postdata
     };
-    request(
-        requestOptions,
-        function(err, response, body) {
-            if (response.statusCode === 201) {
-                res.redirect('/event/' + eventid);
-            } else {
-            _showError(req, res, response.statusCode);
+    if (!postdata.author || !postdata.commentText) {
+        res.redirect('/event/' + eventid + '/comments/new?err=val');
+    } 
+    else {
+        request(
+            requestOptions,
+            function(err, response, body) {
+                if (response.statusCode === 201) {
+                    res.redirect('/event/' + eventid);
+                } else if (response.statusCode === 400 && body.name && body.name === "ValidationError" ) {
+                    res.redirect('/event/' + eventid + '/comments/new?err=val');
+                } else {
+                    console.log(body);
+                    _showError(req, res, response.statusCode);
+                }
             }
-        }
-    );
+        );
+    }
 };
 
-/* GET 'Add review' page */
-module.exports.addComment = function(req, res){
-renderCommentForm(req, res);
+var renderDetailPage = function (req, res, eventDetail) {
+    res.render('eventinfo', {
+        // title: eventDetail.name,
+        // pageHeader: {title: eventDetail.name},
+        // sidebar: {
+        //     context: 'is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
+        //     callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.'
+        // },
+        event: eventDetail
+    });
 };
 
-var renderCommentForm = function (req, res, locDetail) {
-res.render('event-comment-form', {
-title: 'Comment '+locDetail.name+' on Loc8r',
-pageHeader: { title: 'Comment '+locDetail.name }
-});
-};
 
 /* GET 'Add review' page */
 var getEventInfo = function (req, res, callback) {
@@ -162,52 +202,31 @@ var getEventInfo = function (req, res, callback) {
     request(
         requestOptions,
         function(err, response, body) {
-        var data = body;
-        if (response.statusCode === 200) {
-            data.coords = {
-                lng : body.coords[0],
-                lat : body.coords[1]
-            };
-            callback(req, res, data);
-        } else {
-            _showError(req, res, response.statusCode);
-        }
+            var data = body;
+            if (response.statusCode === 200) {
+                data.coords = {
+                    lng : body.coords[0],
+                    lat : body.coords[1]
+                };
+                callback(req, res, data);
+            } else {
+                _showError(req, res, response.statusCode);
+            }
         }
     );
-};
-
-var renderDetailPage = function (req, res, locDetail) {
-res.render('event-info', {
-title: locDetail.name,
-pageHeader: {title: locDetail.name},
-sidebar: {
-context: 'is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
-callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.'
-},
-event: locDetail
-});
 };
 
 module.exports.eventInfo = function(req, res){
-    var requestOptions, path;
-    path = "/api/events/" + req.params.eventid;
-    requestOptions = {
-        url : apiOptions.server + path,
-        method : "GET",
-        json : {}
-    };
-    request(
-        requestOptions,
-        function(err, response, body) {
-            renderDetailPage(req, res);
-        }
-    );
+    getEventInfo(req, res, function(req, res, responseData) {
+        renderDetailPage(req, res, responseData);
+    });
 };
 
-var renderCommentForm = function (req, res) {
-    res.render('event-comment-form', {
-        title: 'Review Starcups on Loc8r',
-        pageHeader: { title: 'Review Starcups' }
+var renderCommentForm = function (req, res, eventDetail) {
+    res.render('eventCommentForm', {
+        title: 'Comment ' + eventDetail.name + ' on UTogether',
+        pageHeader: { title: 'Comment '+ eventDetail.name },
+        error: req.query.err
     });
 };
 

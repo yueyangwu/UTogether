@@ -6,10 +6,10 @@ var ctrlOthers = require('../controllers/others');
 /* Events pages */
 router.get('/', ctrlEvents.eventsList);
 router.get('/event/:eventid', ctrlEvents.eventInfo);
-router.get('/event/:eventid/new', ctrlEvents.addEvent);
+// router.get('/event/:eventid/new', ctrlEvents.addEvent);
 router.get('/event/:eventid/comment/new', ctrlEvents.addComment);
 router.post('/event/:eventid/comment/new', ctrlEvents.doAddComment);
-router.get('/event/myevent', ctrlEvents.myEvent);
+// router.get('/event/myevent', ctrlEvents.myEvent);
 
 /* Other pages */
 router.get('/about', ctrlOthers.about);

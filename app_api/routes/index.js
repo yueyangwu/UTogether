@@ -10,7 +10,6 @@ router.get('/events/:eventid', ctrlEvents.eventsReadOne);
 router.put('/events/:eventid', ctrlEvents.eventsUpdateOne);
 router.delete('/events/:eventid', ctrlEvents.eventsDeleteOne);
 //comment
-
 router.post('/events/:eventid/comments', ctrlComments.commentsCreate);
 router.get('/events/:eventid/comments/:commentid', ctrlComments.commentsReadOne);
 router.put('/events/:eventid/comments/:commentid', ctrlComments.commentsUpdateOne);

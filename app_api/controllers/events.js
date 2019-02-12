@@ -2,170 +2,191 @@ var mongoose = require('mongoose');
 var Ut = mongoose.model('Event');
 
 var sendJsonResponse = function(res, status, content) {
-res.sendStatus(status);
-res.json(content);
+    res.status(status);
+    res.json(content);
 };
 
 module.exports.eventsDeleteOne = function(req, res) {
-var eventid = req.params.eventid;
-if (eventid) {
-Ut
-.findByIdAndRemove(eventid)
-.exec(
-function(err, event) {
-if (err) {
-sendJsonResponse(res, 404, err);
-return;
-}
-sendJsonResponse(res, 204, null);
-}
-);
-} else {
-sendJsonResponse(res, 404, {
-"message": "No eventid"
-});
-}
+    var eventid = req.params.eventid;
+    if (eventid) {
+        Ut
+        .findByIdAndRemove(eventid)
+        .exec(
+        function(err, event) {
+            if (err) {
+                sendJsonResponse(res, 404, err);
+                return;
+            }
+            sendJsonResponse(res, 204, null);
+        }
+        );
+    } 
+    else {
+        sendJsonResponse(res, 404, {
+            "message": "No eventid"
+        });
+    }
 };
 
 module.exports.eventsReadOne = function(req, res) {
-if (req.params && req.params.eventid && req.params.id) {
-Ut
-.findById(req.params.eventid)
-.exec(function(err, event) {
-if (!event) {
-sendJsonResponse(res, 404, {
-"message": "eventid not found"
-});
-return;
-} else if (err) {
-sendJsonResponse(res, 404, err);
-return;
-}
-sendJsonResponse(res, 200, event);
-});
-} else {
-sendJsonResponse(res, 404, {
-"message": "No eventid in request"
-});
-}
+    if (req.params && req.params.eventid) {
+        Ut
+            .findById(req.params.eventid)
+            .exec(function(err, event) {
+                if (!event) {
+                    sendJsonResponse(res, 404, {
+                        "message": "eventid not found"
+                    });
+                    return;
+                } 
+                else if (err) {
+                    sendJsonResponse(res, 404, err);
+                    return;
+                }
+                sendJsonResponse(res, 200, event);
+            });
+    } 
+    else {
+        sendJsonResponse(res, 404, {
+            "message": "No eventid in request"
+        });
+    }
 };
 
-var theEarth = (function(){
-var earthRadius = 6371; // km, miles is 3959
-var getDistanceFromRads = function(rads) {
-return parseFloat(rads * earthRadius);
-};
-var getRadsFromDistance = function(distance) {
-return parseFloat(distance / earthRadius);
-};
-return {
-getDistanceFromRads : getDistanceFromRads,
-getRadsFromDistance : getRadsFromDistance
-};
-})();
+// var theEarth = (function(){
+//     var earthRadius = 6371*1000; // m, miles is 3959
+//     var getDistanceFromRads = function(rads) {
+//         return parseFloat(rads * earthRadius);
+//     };
+//     var getRadsFromDistance = function(distance) {
+//         return parseFloat(distance / earthRadius);
+//     };
+//     return {
+//         getDistanceFromRads : getDistanceFromRads,
+//         getRadsFromDistance : getRadsFromDistance
+//     };
+// })();
 
 module.exports.eventsListByDistance = function(req, res) {
-var lng = parseFloat(req.query.lng);
-var lat = parseFloat(req.query.lat);
-var point = {
-type: "Point",
-coordinates: [lng, lat]
+    console.log('eventsListByDistance:');
+    var lng = parseFloat(req.query.lng);
+    var lat = parseFloat(req.query.lat);
+    var maxDistance = parseFloat(req.query.maxDistance);
+    var point = {
+        type: "Point",
+        coordinates: [lng, lat]
+    };
+    console.log('coordinates: ' + point.coordinates)
+    if ((!lng && lng!==0) || (!lat && lat!==0) || ! maxDistance) {
+        console.log('eventsListByDistance missing params');
+        sendJSONresponse(res, 404, {
+          "message": "lng, lat and maxDistance query parameters are all required"
+        });
+        return;
+    }
+    else{
+        console.log('locationsListByDistance running...');
+        Ut.aggregate(
+            [{
+                '$geoNear': {
+                    'near':point,
+                    'spherical': true,
+                    'distanceField': 'dist',
+                    // 'maxDistance': theEarth.getRadsFromDistance(maxDistance*1000),
+                    'maxDistance': maxDistance*1000,
+                    'num': 10
+                }
+            }],
+            function(err, results) {
+                if (err) {
+                    console.log('geoNear error:', err);
+                    sendJsonResponse(res, 404, err);
+                } 
+                else {
+                    events = buildEventList(req, res, results);
+                    console.log("Test the distance:" + events.distance);
+                    sendJsonResponse(res, 200, events);
+                }
+            }
+        )
+    };
 };
-var geoOptions = {
-spherical: true,
-maxDistance: theEarth.getRadsFromDistance(20),
-num: 10
-};
-if (!lng || !lat) {
-sendJsonResponse(res, 404, {
-"message": "lng and lat query parameters are required"
-});
-return;
-}
-Ut.geoNear(point, options, function (err, results, stats) {
-var events = [];
-if (err) {
-sendJsonResponse(res, 404, err);
-} else {
-results.forEach(function(doc) {
-events.push({
-distance: theEarth.getDistanceFromRads(doc.dis),
-title: doc.obj.title,
-date: doc.obj.date,
-time: doc.obj.time,
-joined: doc.obj.joined,
-address: doc.obj.address,
-_id: doc.obj._id
-});
-});
-sendJsonResponse(res, 200, events);
-}
-});
+
+var buildEventList = function(req, res, results) {
+  console.log('buildEventList:');
+  var events = [];
+  results.forEach(function(doc) {
+    events.push({
+        distance: doc.dist,
+        title: doc.title,
+        date: doc.date,
+        time: doc.time,
+        event: doc.event,
+        coords: doc.coords,
+        category: doc.category,
+        description: doc.description,
+        _id: doc._id
+    });
+  });
+  return events;
 };
 
 module.exports.eventsCreate = function(req, res) {
-Ut.create({
-title: req.body.title,
-date: req.body.date,
-time: req.body.time,
-joined: req.body.joined,
-limit: req.body.limit,
-address: req.body.address,
-category: req.body.category,
-description: req.body.description,
-image: req.body.image,
-comments: req.body.comments,
-coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)]
-}, function(err, location) {
-if (err) {
-sendJsonResponse(res, 400, err);
-} else {
-sendJsonResponse(res, 201, location);
-}
-});
+    Ut.create({
+        title: req.body.title,
+        date: req.body.date,
+        time: req.body.time,
+        event: req.body.event,
+        coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
+        category: req.body.category,
+        description: req.body.description
+    }, function(err, event) {
+            if (err) {
+                console.log(err);
+                sendJsonResponse(res, 400, err);
+            } else {
+                console.log(event);
+                sendJsonResponse(res, 201, event);
+            }
+        });
 };
 
 module.exports.eventsUpdateOne = function(req, res) {
-if (!req.params.eventid) {
-sendJsonResponse(res, 404, {
-"message": "Not found, locationid is required"
-});
-return;
-}
-Ut
-.findById(req.params.eventid)
-.select('-comments -joined')
-.exec(
-function(err, event) {
-if (!event) {
-sendJsonResponse(res, 404, {
-"message": "eventid not found"
-});
-return;
-} else if (err) {
-sendJsonResponse(res, 400, err);
-return;
-}
-event.title = req.body.title;
-event.address = req.body.address;
-event.date = req.body.date,
-event.time = req.body.time,
-event.limit = req.body.limit,
-event.address = req.body.address,
-event.category = req.body.category,
-event.description = req.body.description,
-event.image = req.body.image,
-event.coords = [parseFloat(req.body.lng),
-parseFloat(req.body.lat)];
-event.save(function(err, event) {
-if (err) {
-sendJsonResponse(res, 404, err);
-} else {
-sendJsonResponse(res, 200, event);
-}
-});
-}
-);
+    if (!req.params.eventid) {
+        sendJsonResponse(res, 404, {
+            "message": "Not found, eventid is required"
+        });
+        return;
+    }
+    Ut
+    .findById(req.params.eventid)
+    .select('-comments')
+    .exec(
+    function(err, event) {
+        if (!event) {
+            sendJsonResponse(res, 404, {
+                "message": "eventid not found"
+            });
+            return;
+        } 
+        else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
+        }
+        event.title = req.body.title;
+        event.date = req.body.date;
+        event.time = req.body.time;
+        event.event = req.body.event;
+        event.coords = [parseFloat(req.body.lng),parseFloat(req.body.lat)];
+        event.category = req.body.category;
+        event.description = req.body.description;
+        event.save(function(err, event) {
+            if (err) {
+                sendJsonResponse(res, 404, err);
+            } 
+            else {
+                sendJsonResponse(res, 200, event);
+            }
+        });
+    });
 };
-
-// module.exports = Event;
