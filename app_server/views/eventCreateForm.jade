@@ -1,0 +1,40 @@
+extends layout
+block content
+    .row.page-header
+        .col-lg-12
+            h1= pageHeader.title
+    .row
+        .error= message
+        .col-xs-12.col-md-6
+        .error= message
+            form.form-horizontal(action="", method="post", role="form")
+                .form-group
+                    label.col-xs-2.control-label(for="title") Title
+                    .col-xs-12
+                        input#name.form-control(title="title")
+                .form-group
+                    label.col-xs-2.control-label(for="date") Date
+                    .col-xs-12
+                        input#name.form-control(date="date")
+                .form-group
+                    label.col-xs-2.control-label(for="time") Time
+                    .col-xs-12
+                        input#name.form-control(time="time")
+                .form-group
+                    label.col-xs-2.control-label(for="location") Location
+                    .col-xs-12
+                        input#name.form-control(location="location")
+                .form-group
+                    label.col-xs-2.control-label(for="coords") Coords
+                    .col-xs-12
+                        input#name.form-control(coords="coords")
+                .form-group
+                    label.col-xs-2.control-label(for="category") Category
+                    .col-xs-12
+                        input#name.form-control(category="category")
+                .form-group
+                    label.col-xs-2.control-label(for="description") Description
+                    .col-xs-12
+                        textarea#review.form-control(description="description", rows="5")
+                button.btn.btn-default.pull-right Create my event
+        .col-xs-12.col-md-4

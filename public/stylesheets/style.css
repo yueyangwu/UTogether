@@ -1,3 +1,4 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 .panel-body img{
     display: block;
     width:100%;

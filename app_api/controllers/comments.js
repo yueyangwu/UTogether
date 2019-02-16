@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Ut = mongoose.model('Event');
 
 var sendJsonResponse = function(res, status, content) {
-res.status(status);
-res.json(content);
+    res.status(status);
+    res.json(content);
 };
 
 var doAddComment = function(req, res, event) {
@@ -72,7 +72,8 @@ module.exports.commentsReadOne = function(req, res) {
                         return;
                     }
                     if (event.comments && event.comments.length > 0) {
-                        comment = event.comments.id(req.params.commentid);
+                        // comment = event.comments.id(req.params.commentid);
+                        comment = event.comments.find(comment => comment.toJSON().id.toString() === req.params.commentid)
                         if (!comment) {
                             sendJsonResponse(res, 404, {
                                 "message": "commentid not found"

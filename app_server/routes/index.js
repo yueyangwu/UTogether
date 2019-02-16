@@ -4,11 +4,12 @@ var ctrlEvents = require('../controllers/events');
 var ctrlOthers = require('../controllers/others');
 
 /* Events pages */
-router.get('/', ctrlEvents.eventsList);
-router.get('/event/:eventid', ctrlEvents.eventInfo);
-// router.get('/event/:eventid/new', ctrlEvents.addEvent);
-router.get('/event/:eventid/comment/new', ctrlEvents.addComment);
-router.post('/event/:eventid/comment/new', ctrlEvents.doAddComment);
+router.get('/events', ctrlEvents.eventsList);
+router.get('/events/:eventid', ctrlEvents.eventInfo);
+router.get('/event/new', ctrlEvents.addEvent);
+router.post('/event/new', ctrlEvents.doAddEvent);
+router.get('/events/:eventid/comment/new', ctrlEvents.addComment);
+router.post('/events/:eventid/comment/new', ctrlEvents.doAddComment);
 // router.get('/event/myevent', ctrlEvents.myEvent);
 
 /* Other pages */

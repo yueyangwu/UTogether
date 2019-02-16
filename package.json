@@ -6,6 +6,9 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@angular/animations": "^7.2.5",
+    "@angular/cdk": "^7.3.2",
+    "@angular/material": "^7.3.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",

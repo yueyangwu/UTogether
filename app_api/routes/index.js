@@ -5,10 +5,10 @@ var ctrlComments = require('../controllers/comments');
 
 // events
 router.get('/events', ctrlEvents.eventsListByDistance);
-router.post('/events', ctrlEvents.eventsCreate);
+router.post('/event', ctrlEvents.eventsCreate);
 router.get('/events/:eventid', ctrlEvents.eventsReadOne);
-router.put('/events/:eventid', ctrlEvents.eventsUpdateOne);
-router.delete('/events/:eventid', ctrlEvents.eventsDeleteOne);
+// router.put('/events/:eventid', ctrlEvents.eventsUpdateOne);
+// router.delete('/events/:eventid', ctrlEvents.eventsDeleteOne);
 //comment
 router.post('/events/:eventid/comments', ctrlComments.commentsCreate);
 router.get('/events/:eventid/comments/:commentid', ctrlComments.commentsReadOne);

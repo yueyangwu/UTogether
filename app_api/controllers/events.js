@@ -6,36 +6,37 @@ var sendJsonResponse = function(res, status, content) {
     res.json(content);
 };
 
-module.exports.eventsDeleteOne = function(req, res) {
-    var eventid = req.params.eventid;
-    if (eventid) {
-        Ut
-        .findByIdAndRemove(eventid)
-        .exec(
-        function(err, event) {
-            if (err) {
-                sendJsonResponse(res, 404, err);
-                return;
-            }
-            sendJsonResponse(res, 204, null);
-        }
-        );
-    } 
-    else {
-        sendJsonResponse(res, 404, {
-            "message": "No eventid"
-        });
-    }
-};
+// module.exports.eventsDeleteOne = function(req, res) {
+//     var eventid = req.params.eventid;
+//     if (eventid) {
+//         Ut
+//         .findByIdAndRemove(eventid)
+//         .exec(
+//         function(err, event) {
+//             if (err) {
+//                 sendJsonResponse(res, 404, err);
+//                 return;
+//             }
+//             sendJsonResponse(res, 204, null);
+//         }
+//         );
+//     } 
+//     else {
+//         sendJsonResponse(res, 404, {
+//             "message": "No eventid"
+//         });
+//     }
+// };
 
 module.exports.eventsReadOne = function(req, res) {
+    console.log('Finding event details', req.param);
     if (req.params && req.params.eventid) {
         Ut
             .findById(req.params.eventid)
             .exec(function(err, event) {
                 if (!event) {
                     sendJsonResponse(res, 404, {
-                        "message": "eventid not found"
+                        "message": "Oops,eventid not found"
                     });
                     return;
                 } 
@@ -132,6 +133,20 @@ var buildEventList = function(req, res, results) {
 };
 
 module.exports.eventsCreate = function(req, res) {
+        Ut
+        .select('events')
+        .exec(
+        function(err, event) {
+            if (err) {
+                sendJsonResponse(res, 400, err);
+            } 
+            else {
+                doAddEvent(req, res,event);
+            }
+        });
+};
+
+var doAddEvent = function(req, res, event) {
     Ut.create({
         title: req.body.title,
         date: req.body.date,
@@ -151,42 +166,42 @@ module.exports.eventsCreate = function(req, res) {
         });
 };
 
-module.exports.eventsUpdateOne = function(req, res) {
-    if (!req.params.eventid) {
-        sendJsonResponse(res, 404, {
-            "message": "Not found, eventid is required"
-        });
-        return;
-    }
-    Ut
-    .findById(req.params.eventid)
-    .select('-comments')
-    .exec(
-    function(err, event) {
-        if (!event) {
-            sendJsonResponse(res, 404, {
-                "message": "eventid not found"
-            });
-            return;
-        } 
-        else if (err) {
-            sendJsonResponse(res, 400, err);
-            return;
-        }
-        event.title = req.body.title;
-        event.date = req.body.date;
-        event.time = req.body.time;
-        event.event = req.body.event;
-        event.coords = [parseFloat(req.body.lng),parseFloat(req.body.lat)];
-        event.category = req.body.category;
-        event.description = req.body.description;
-        event.save(function(err, event) {
-            if (err) {
-                sendJsonResponse(res, 404, err);
-            } 
-            else {
-                sendJsonResponse(res, 200, event);
-            }
-        });
-    });
-};
+// module.exports.eventsUpdateOne = function(req, res) {
+//     if (!req.params.eventid) {
+//         sendJsonResponse(res, 404, {
+//             "message": "Not found, eventid is required"
+//         });
+//         return;
+//     }
+//     Ut
+//     .findById(req.params.eventid)
+//     .select('-comments')
+//     .exec(
+//     function(err, event) {
+//         if (!event) {
+//             sendJsonResponse(res, 404, {
+//                 "message": "eventid not found"
+//             });
+//             return;
+//         } 
+//         else if (err) {
+//             sendJsonResponse(res, 400, err);
+//             return;
+//         }
+//         event.title = req.body.title;
+//         event.date = req.body.date;
+//         event.time = req.body.time;
+//         event.event = req.body.event;
+//         event.coords = [parseFloat(req.body.lng),parseFloat(req.body.lat)];
+//         event.category = req.body.category;
+//         event.description = req.body.description;
+//         event.save(function(err, event) {
+//             if (err) {
+//                 sendJsonResponse(res, 404, err);
+//             } 
+//             else {
+//                 sendJsonResponse(res, 200, event);
+//             }
+//         });
+//     });
+// };

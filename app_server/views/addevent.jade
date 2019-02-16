@@ -5,7 +5,7 @@ block content
         .col-xs-12
             .panel-body.panel.panel-default
                 .bs-component
-                    form.form-horizontal
+                    form.form-horizontal(action="", method="post", role="form")
                         fieldset
                             legend
                                 | Create your own event
@@ -13,37 +13,37 @@ block content
                                 .col-xs-2
                                     label(for='inputfile').control-label Banner
                                 .col-xs-10.col-xs-offset-5
-                                    input(type='file')(id='inputfile')
+                                    input(type='file')(name='inputfile')
                             .form-group
                                 .col-xs-2
-                                    label(for='eventtitle').control-label Title
+                                    label(for='title').control-label Title
                                 .col-xs-10
-                                    input(type='text')(placeholder='Event Title')(id='eventtitle').form-control
+                                    input(type='text')(placeholder='Event Title')(name='title').form-control
                             .form-group
                                 .col-xs-2
-                                    label(for='eventdate').control-label Date
+                                    label(for='date').control-label Date
                                 .col-xs-10
-                                    input(type='text')(placeholder='DD/MM/YYYY')(id='eventdate').form-control
+                                    input(type='text')(placeholder='DD/MM/YYYY')(name='date').form-control
                             .form-group
                                 .col-xs-2
-                                    label(for='eventtime').control-label Time
+                                    label(for='time').control-label Time
                                 .col-xs-10
-                                    input(type='text')(placeholder='16:30')(id='eventtime').form-control
+                                    input(type='text')(placeholder='16:30')(name='time').form-control
                             .form-group
                                 .col-xs-2
-                                    label(for='eventlocation').control-label Location
+                                    label(for='location').control-label Location
                                 .col-xs-10
-                                    input(type='text')(placeholder='Event Location')(id='eventlocation').form-control
+                                    input(type='text')(placeholder='Event Location')(name='location').form-control
                             .form-group
                                 .col-xs-2
-                                    label(for='eventparticipants').control-label Participants
+                                    label(for='coords').control-label Coords
                                 .col-xs-10
-                                    input(type='text')(placeholder='Number of Participants')(id='eventparticipants').form-control
+                                    input(type='text')(placeholder='Coords')(name='coords').form-control
                             .form-group
                                 .col-xs-2
-                                    label(for='eventtime').control-label Category
+                                    label(for='category').control-label Category
                                 .col-xs-10
-                                    select.form-control
+                                    select(name='category').form-control
                                         option Culture Exchange
                                         option Belief
                                         option Study
@@ -56,10 +56,10 @@ block content
                                         option Others
                             .form-group
                                 .col-xs-2
-                                    label(for='eventdescription').control-label Description
+                                    label(for='description').control-label Description
                                 .col-xs-10
-                                    textarea(placeholder='Event Description')(id='eventdescription').form-control
+                                    textarea(placeholder='Event Description')(name='description').form-control
                             .form-group
                                 .col-xs-12.col-xs-offset-5
-                                    button(type='submit').btn.bt-primary
+                                    button.btn.bt-primary
                                         |Submit

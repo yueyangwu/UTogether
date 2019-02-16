@@ -1,5 +1,7 @@
 extends layout
 
+include _includes/sharedHTMLfunctions
+
 block content
     .page-header
         .row
@@ -37,11 +39,12 @@ block content
                 each event in events
                     .col-xs-12.list-group-item
                         h4
-                            a(href='/event/#{event.id}')= event.title
+                            a(href='/events/#{event._id}')= event.title
                             span.badge.pull-right.badge-default= event.distance
-                        p= event.date
-                        p= event.time
+                        h6
+                            +formatDate(event.date)
+                            &nbsp;&nbsp;&nbsp;
+                            span= event.time
                         p= event.location
-                        p= event.coords
                         p= event.category
                         p= event.description

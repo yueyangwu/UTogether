@@ -52,10 +52,10 @@ var renderHomepage = function(req, res, responseBody){
     }
     res.render('eventslist', {
         // title: 'Utogether - find your friends',
-        // pageHeader: {
-        //     title: 'Utogether',
-        //     strapline: 'Help you find your friends'
-        // },
+        pageHeader: {
+            title: 'Utogether'
+            // strapline: 'Help you find your friends'
+        },
         // sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
         events: responseBody,
         message: message
@@ -109,9 +109,6 @@ module.exports.eventsList = function(req, res){
         method : "GET",
         json : {},
         qs : {
-            // lng : 1,
-            // lat : 1,
-            // maxDistance : 0.002
             lng : -97.742457,
             lat : 30.282683,
             // lng : -97.741202,
@@ -135,14 +132,63 @@ module.exports.eventsList = function(req, res){
     );
 };
 
-/* GET 'Add event' page */
-// module.exports.addEvent = function(req, res){
-//     res.render('addevent', { title: 'Add Event' });
-// };
 // module.exports.myEvent = function(req, res){
 //     res.render('index', { title: 'My Events' });
 // };
 
+module.exports.doAddEvent = function(req, res){
+    // var requestOptions, path, eventid, postdata;
+    var requestOptions, postdata;
+    // eventid = req.params.eventid;
+    // path = "/api/events/" + eventid + '/comments';
+    path = "/api/events";
+    postdata = {
+        title: req.body.title,
+        date: req.body.date,
+        time: req.body.time,
+        location: req.body.location,
+        coords: req.body.coords,
+        category: req.body.category,
+        description: req.body.description
+    };
+    requestOptions = {
+        url : apiOptions.server + path,
+        // url : apiOptions.server,
+        method : "POST",
+        json : postdata
+    };
+    if (!postdata.title || !postdata.date || !postdata.time || !postdata.location || !postdata.coords || !postdata.category || !postdata.description) {
+        res.redirect('/event/events/new?err=val');
+    } 
+    else {
+        request(
+            requestOptions,
+            function(err, response, body) {
+                if (response.statusCode === 201) {
+                    res.redirect('/events');
+                } else if (response.statusCode === 400 && body.name && body.name === "ValidationError" ) {
+                    res.redirect('/events/new?err=val');
+                } else {
+                    console.log(body);
+                    _showError(req, res, response.statusCode);
+                }
+            }
+        );
+    }
+};
+
+var renderEventForm = function (req, res) {
+    res.render('addevent', {
+        title: 'New Event',
+        pageHeader: { title: 'Event'},
+        error: req.query.err
+    });
+};
+
+/* GET 'Add event' page */
+module.exports.addEvent = function(req, res){
+    renderEventForm(req, res);
+};
 
 module.exports.doAddComment = function(req, res){
     var requestOptions, path, eventid, postdata;
@@ -158,16 +204,16 @@ module.exports.doAddComment = function(req, res){
         json : postdata
     };
     if (!postdata.author || !postdata.commentText) {
-        res.redirect('/event/' + eventid + '/comments/new?err=val');
+        res.redirect('/events/' + eventid + '/comments/new?err=val');
     } 
     else {
         request(
             requestOptions,
             function(err, response, body) {
                 if (response.statusCode === 201) {
-                    res.redirect('/event/' + eventid);
+                    res.redirect('/events/' + eventid);
                 } else if (response.statusCode === 400 && body.name && body.name === "ValidationError" ) {
-                    res.redirect('/event/' + eventid + '/comments/new?err=val');
+                    res.redirect('/events/' + eventid + '/comments/new?err=val');
                 } else {
                     console.log(body);
                     _showError(req, res, response.statusCode);
@@ -177,22 +223,30 @@ module.exports.doAddComment = function(req, res){
     }
 };
 
+var renderCommentForm = function (req, res, eventDetail) {
+    res.render('eventCommentForm', {
+        title: 'Comment ' + eventDetail.title + ' on UTogether',
+        pageHeader: { title: 'Comment '+ eventDetail.title },
+        error: req.query.err
+    });
+};
+
+module.exports.addComment = function(req, res){
+    getEventInfo(req, res, function(req, res, responseData) {
+        renderCommentForm(req, res, responseData);
+    });
+};
+
 var renderDetailPage = function (req, res, eventDetail) {
     res.render('eventinfo', {
-        // title: eventDetail.name,
-        // pageHeader: {title: eventDetail.name},
-        // sidebar: {
-        //     context: 'is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
-        //     callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.'
-        // },
         event: eventDetail
     });
 };
 
-
 /* GET 'Add review' page */
 var getEventInfo = function (req, res, callback) {
     var requestOptions, path;
+    console.log(req.params.eventid);
     path = "/api/events/" + req.params.eventid;
     requestOptions = {
         url : apiOptions.server + path,
@@ -203,6 +257,7 @@ var getEventInfo = function (req, res, callback) {
         requestOptions,
         function(err, response, body) {
             var data = body;
+            console.log(data);
             if (response.statusCode === 200) {
                 data.coords = {
                     lng : body.coords[0],
@@ -219,19 +274,5 @@ var getEventInfo = function (req, res, callback) {
 module.exports.eventInfo = function(req, res){
     getEventInfo(req, res, function(req, res, responseData) {
         renderDetailPage(req, res, responseData);
-    });
-};
-
-var renderCommentForm = function (req, res, eventDetail) {
-    res.render('eventCommentForm', {
-        title: 'Comment ' + eventDetail.name + ' on UTogether',
-        pageHeader: { title: 'Comment '+ eventDetail.name },
-        error: req.query.err
-    });
-};
-
-module.exports.addComment = function(req, res){
-    getEventInfo(req, res, function(req, res, responseData) {
-        renderCommentForm(req, res, responseData);
     });
 };

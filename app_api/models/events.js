@@ -5,6 +5,7 @@ var commentsSchema = new mongoose.Schema({
     commentText: {type: String, required: true},
     createdOn: {type: Date, default: Date.now}
 });
+
 var eventSchema = new mongoose.Schema({
     title: {type: String, required: true},
     date: {type: Date, default: Date.now, required: true},
