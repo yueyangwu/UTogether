@@ -3,7 +3,7 @@ var apiOptions = {
     server : "http://localhost:3000"
 };
 if (process.env.NODE_ENV === 'production') {
-    apiOptions.server = "https://polar-river-81614.herokuapp.com/events";
+    apiOptions.server = "https://polar-river-81614.herokuapp.com";
 }
 
 /* GET 'home' page */
