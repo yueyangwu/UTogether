@@ -141,7 +141,7 @@ module.exports.doAddEvent = function(req, res){
     var requestOptions, postdata;
     // eventid = req.params.eventid;
     // path = "/api/events/" + eventid + '/comments';
-    path = "/api/events";
+    path = "/api/mynewevent";
     postdata = {
         title: req.body.title,
         date: req.body.date,
@@ -158,7 +158,7 @@ module.exports.doAddEvent = function(req, res){
         json : postdata
     };
     if (!postdata.title || !postdata.date || !postdata.time || !postdata.location || !postdata.coords || !postdata.category || !postdata.description) {
-        res.redirect('/event/events/new?err=val');
+        res.redirect('/mynewevent/new?err=val');
     } 
     else {
         request(
@@ -167,7 +167,7 @@ module.exports.doAddEvent = function(req, res){
                 if (response.statusCode === 201) {
                     res.redirect('/events');
                 } else if (response.statusCode === 400 && body.name && body.name === "ValidationError" ) {
-                    res.redirect('/events/new?err=val');
+                    res.redirect('/mynewevent/new?err=val');
                 } else {
                     console.log(body);
                     _showError(req, res, response.statusCode);

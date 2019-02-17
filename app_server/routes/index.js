@@ -6,8 +6,8 @@ var ctrlOthers = require('../controllers/others');
 /* Events pages */
 router.get('/events', ctrlEvents.eventsList);
 router.get('/events/:eventid', ctrlEvents.eventInfo);
-router.get('/event/new', ctrlEvents.addEvent);
-router.post('/event/new', ctrlEvents.doAddEvent);
+router.get('/mynewevent/new', ctrlEvents.addEvent);
+router.post('/mynewevent/new', ctrlEvents.doAddEvent);
 router.get('/events/:eventid/comment/new', ctrlEvents.addComment);
 router.post('/events/:eventid/comment/new', ctrlEvents.doAddComment);
 // router.get('/event/myevent', ctrlEvents.myEvent);

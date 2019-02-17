@@ -113,6 +113,7 @@ module.exports.eventsListByDistance = function(req, res) {
     };
 };
 
+//display events from db
 var buildEventList = function(req, res, results) {
   console.log('buildEventList:');
   var events = [];
@@ -132,37 +133,30 @@ var buildEventList = function(req, res, results) {
   return events;
 };
 
+//add new event
 module.exports.eventsCreate = function(req, res) {
-        Ut
-        .select('events')
-        .exec(
-        function(err, event) {
-            if (err) {
-                sendJsonResponse(res, 400, err);
-            } 
-            else {
-                doAddEvent(req, res,event);
-            }
-        });
-};
-
-var doAddEvent = function(req, res, event) {
-    Ut.create({
-        title: req.body.title,
-        date: req.body.date,
-        time: req.body.time,
-        event: req.body.event,
-        coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
-        category: req.body.category,
-        description: req.body.description
-    }, function(err, event) {
-            if (err) {
-                console.log(err);
-                sendJsonResponse(res, 400, err);
-            } else {
-                console.log(event);
-                sendJsonResponse(res, 201, event);
-            }
+    console.log("what is the db");
+    console.log(req.body.coords.split(" "));
+        var listDocuments=[
+        {
+            title: req.body.title,
+            date: new Date(req.body.date),
+            time: req.body.time,
+            location: req.body.location,
+            coords: req.body.coords.split(" "),
+            category: req.body.category,
+            description: req.body.description
+        }
+        ];
+        Ut.create(listDocuments, function(err, event) {
+                var thisEvent;
+                if (err) {
+                    console.log(err);
+                    sendJsonResponse(res, 400, err);
+                } else {
+                    thisEvent = event[event.length - 1];
+                    sendJsonResponse(res, 201, thisEvent);
+                }
         });
 };
 

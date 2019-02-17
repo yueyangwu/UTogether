@@ -9,36 +9,36 @@ block content
                         fieldset
                             legend
                                 | Create your own event
-                            .form-group
-                                .col-xs-2
-                                    label(for='inputfile').control-label Banner
-                                .col-xs-10.col-xs-offset-5
-                                    input(type='file')(name='inputfile')
+                            //-.form-group
+                            //-    .col-xs-2
+                            //-        label(for='inputfile').control-label Banner
+                            //-    .col-xs-10.col-xs-offset-5
+                            //-        input(type='file')(name='inputfile')
                             .form-group
                                 .col-xs-2
                                     label(for='title').control-label Title
                                 .col-xs-10
-                                    input(type='text')(placeholder='Event Title')(name='title').form-control
+                                    input(placeholder='Event Title', name='title').form-control
                             .form-group
                                 .col-xs-2
                                     label(for='date').control-label Date
                                 .col-xs-10
-                                    input(type='text')(placeholder='DD/MM/YYYY')(name='date').form-control
+                                    input(placeholder='Oct 23, 2019', name='date').form-control
                             .form-group
                                 .col-xs-2
                                     label(for='time').control-label Time
                                 .col-xs-10
-                                    input(type='text')(placeholder='16:30')(name='time').form-control
+                                    input(placeholder='16:30', name='time').form-control
                             .form-group
                                 .col-xs-2
                                     label(for='location').control-label Location
                                 .col-xs-10
-                                    input(type='text')(placeholder='Event Location')(name='location').form-control
+                                    input(placeholder='Event Location', name='location').form-control
                             .form-group
                                 .col-xs-2
                                     label(for='coords').control-label Coords
                                 .col-xs-10
-                                    input(type='text')(placeholder='Coords')(name='coords').form-control
+                                    input(placeholder='Coords', name='coords').form-control
                             .form-group
                                 .col-xs-2
                                     label(for='category').control-label Category
@@ -58,7 +58,7 @@ block content
                                 .col-xs-2
                                     label(for='description').control-label Description
                                 .col-xs-10
-                                    textarea(placeholder='Event Description')(name='description').form-control
+                                    textarea(placeholder='Event Description', name='description').form-control
                             .form-group
                                 .col-xs-12.col-xs-offset-5
                                     button.btn.bt-primary
