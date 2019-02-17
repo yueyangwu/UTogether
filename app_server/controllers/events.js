@@ -42,7 +42,6 @@ if (process.env.NODE_ENV === 'production') {
 var renderHomepage = function(req, res, responseBody){
     var message;
     if (!(responseBody instanceof Array)) {
-        console.log("what is the responsebody?"+responsebody);
         message = "API lookup error";
         responseBody = [];
     } 
