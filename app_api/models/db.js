@@ -5,8 +5,7 @@ var dbURI = 'mongodb://localhost/UTogether';
 
 if (process.env.NODE_ENV === 'production') {
 // dbURI = process.env.MONGOLAB_URI;
-dbURI = 'mongodb://heroku_d5g4fprh:3q1dr9l26kltjoiofl03bog5qe@ds139295.mlab.com:39295/heroku_mc26h7x7'
-
+dbURI = 'mongodb://heroku_d5g4fprh:3q1dr9l26kltjoiofl03bog5qe@ds139295.mlab.com:39295/heroku_d5g4fprh';
 }
 
 mongoose.connect(dbURI,{useNewUrlParser:true});

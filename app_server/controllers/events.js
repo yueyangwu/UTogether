@@ -122,6 +122,7 @@ module.exports.eventsList = function(req, res){
             var i, data;
             data = body;
             console.log(data);
+            console.log("Response is:"+response);
             if (response.statusCode === 200 && data.length) {
                 for (i=0; i<data.length; i++) {
                     data[i].distance = _formatDistance(data[i].distance);
