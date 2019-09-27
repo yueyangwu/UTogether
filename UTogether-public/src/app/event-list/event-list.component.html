@@ -1,0 +1,13 @@
+<div class="col-xs-12 list-group-item" *ngFor="let event of events">
+    <h4>
+      <a href="/events/{{event._id}}">{{event.name}}</a>
+      <span class="badge pull-right badge-default">{{event.distance | distance}}</span>
+    </h4>
+    <h6>
+      {{event.date}}&nbsp;&nbsp;&nbsp;
+      <span>{{event.time}}</span>
+    </h6>
+    <p></p>
+    <p>{{event.category}}</p>
+    <p>{{event.description}}</p>
+</div>
