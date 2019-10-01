@@ -36,15 +36,20 @@ block content
         .col-xs-12.col-sm-7.list-group
             .row
                 .error= message
-                each event in events
-                    .col-xs-12.list-group-item
-                        h4
-                            a(href='/events/#{event._id}')= event.title
-                            span.badge.pull-right.badge-default= event.distance
-                        h6
-                            +formatDate(event.date)
-                            &nbsp;&nbsp;&nbsp;
-                            span= event.time
-                        p= event.location
-                        p= event.category
-                        p= event.description
+                app-event-list
+                //- each event in events
+                    //- .col-xs-12.list-group-item
+                    //-     h4
+                    //-         a(href='/events/#{event._id}')= event.title
+                    //-         span.badge.pull-right.badge-default= event.distance
+                    //-     h6
+                    //-         +formatDate(event.date)
+                    //-         &nbsp;&nbsp;&nbsp;
+                    //-         span= event.time
+                    //-     p= event.location
+                    //-     p= event.category
+                    //-     p= event.description
+block scripts
+    script(src='/build/runtime.26209474bfa8dc87a77c.js')
+    script(src='/build/polyfills.8bbb231b43165d65d357.js')
+    script(src='/build/main.aef6fa972621e52e3b6d.js')

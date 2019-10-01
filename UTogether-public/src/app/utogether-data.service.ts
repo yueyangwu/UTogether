@@ -9,8 +9,8 @@ export class UTogetherDataService {
   private apiBaseUrl = 'http://localhost:3000/api';
 
   public getEvents(): Promise<Event[]> {
-    const lng: number = -0.7992599;
-    const lat: number = 51.378091;
+    const lng: number = -97.742457;
+    const lat: number = 30.282683;
     const maxDistance: number = 20;
     const url: string = `${this.apiBaseUrl}/events?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
     return this.http

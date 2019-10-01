@@ -95,9 +95,8 @@ module.exports.eventsListByDistance = function(req, res) {
                     'distanceField': 'dist',
                     // 'maxDistance': theEarth.getRadsFromDistance(maxDistance*1000),
                     'maxDistance': maxDistance*1000,
-                    'num': 10
                 }
-            }],
+            }, {$limit: 10}],
             function(err, results) {
                 if (err) {
                     console.log('geoNear error:', err);

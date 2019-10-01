@@ -4,7 +4,8 @@ var ctrlEvents = require('../controllers/events');
 var ctrlOthers = require('../controllers/others');
 
 /* Events pages */
-router.get('/events', ctrlEvents.eventsList);
+router.get('/', ctrlEvents.eventsList);
+// router.get('/events', ctrlEvents.eventsList);
 router.get('/events/:eventid', ctrlEvents.eventInfo);
 router.get('/mynewevent/new', ctrlEvents.addEvent);
 router.post('/mynewevent/new', ctrlEvents.doAddEvent);
