@@ -15,7 +15,7 @@
     "express": "^4.16.4",
     "jade": "~1.11.0",
     "mongodb": "^3.3.2",
-    "mongoose": "^5.4.13",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "nodemon": "^1.18.9",
